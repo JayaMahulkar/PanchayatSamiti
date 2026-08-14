@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/Angular/" />
+  <Project Path="DataLayer/DataLayer.csproj" />
+  <Project Path="PanchayatSamitiAPI/PanchayatSamitiAPI.csproj" />
+</Solution>
