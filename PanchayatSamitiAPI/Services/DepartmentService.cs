@@ -22,7 +22,7 @@ namespace PanchayatSamitiAPI.Services
             {
                 UniqueId = Guid.NewGuid(),
                 DepartmentName = departmentModel.DepartmentName,
-                IsActive = departmentModel.IsActive,
+                IsActive = departmentModel.IsActive ?? true,
                 Createdby = "Jaya",
                 UpdatedBy="Jaya",
                 ModifiedDate=DateTime.Now,
@@ -45,9 +45,10 @@ namespace PanchayatSamitiAPI.Services
                 {
                     Id = item.Id,
                     DepartmentName = item.DepartmentName,
-                    IsActive = item.IsActive,
+                    IsActive = item.IsActive, 
+                    CreatedDate = item.ModifiedDate,
                     UniqueId = item.UniqueId
-                }).ToList()
+                }).OrderByDescending(a=>a.CreatedDate).ToList()
             };
 
             return result;
@@ -80,7 +81,7 @@ namespace PanchayatSamitiAPI.Services
                 Id = department.Id,
                 UniqueId = existingDepartment.UniqueId,
                 DepartmentName = department.DepartmentName,
-                IsActive = department.IsActive,
+                IsActive = department.IsActive??true,
                 Createdby= existingDepartment.Createdby,
                 CreatedDate = existingDepartment.CreatedDate,
                 UpdatedBy = "Jaya",

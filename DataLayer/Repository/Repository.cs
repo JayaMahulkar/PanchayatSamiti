@@ -9,10 +9,12 @@ namespace DataLayer.Repository
         protected readonly PanchayatSamitiContext _context;
         protected readonly DbSet<T> _dbSet;
 
+
         public Repository(PanchayatSamitiContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
+
         }
 
 
@@ -26,7 +28,11 @@ namespace DataLayer.Repository
             }
             catch(Exception ex)
             {
-                return false;
+                Console.WriteLine("ERROR: " + ex.Message);
+                Console.WriteLine("INNER ERROR: " + ex.InnerException?.Message);
+
+                throw;
+                
             }
         }
 

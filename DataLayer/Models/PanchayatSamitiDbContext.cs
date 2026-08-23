@@ -13,7 +13,10 @@ public partial class PanchayatSamitiDbContext : DbContext
     public PanchayatSamitiDbContext(DbContextOptions<PanchayatSamitiDbContext> options)
         : base(options)
     {
+         
     }
+
+    public virtual DbSet<AdhiSuchanaMaster> AdhiSuchanaMasters { get; set; }
 
     public virtual DbSet<BankMaster> BankMasters { get; set; }
 
@@ -30,6 +33,8 @@ public partial class PanchayatSamitiDbContext : DbContext
     public virtual DbSet<KhatePramukhMaster> KhatePramukhMasters { get; set; }
 
     public virtual DbSet<PanchayatSamitiMaster> PanchayatSamitiMasters { get; set; }
+
+    public virtual DbSet<PensionHolderInformation> PensionHolderInformations { get; set; }
 
     public virtual DbSet<RelationMaster> RelationMasters { get; set; }
 
@@ -53,6 +58,12 @@ public partial class PanchayatSamitiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AdhiSuchanaMaster>(entity =>
+        {
+            entity.Property(e => e.CreatedBy).IsFixedLength();
+            entity.Property(e => e.UpdatedBy).IsFixedLength();
+        });
+
         modelBuilder.Entity<BankMaster>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__BankMast__3214EC077B423C1C");
@@ -102,6 +113,14 @@ public partial class PanchayatSamitiDbContext : DbContext
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.UniqueId).HasDefaultValueSql("(newid())");
+        });
+
+        modelBuilder.Entity<PensionHolderInformation>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).IsFixedLength();
+            entity.Property(e => e.IsDisabilityPensionPayable).IsFixedLength();
+            entity.Property(e => e.UpdatedBy).IsFixedLength();
         });
 
         modelBuilder.Entity<RelationMaster>(entity =>

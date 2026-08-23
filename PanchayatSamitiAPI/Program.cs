@@ -1,4 +1,5 @@
 
+using Microsoft.EntityFrameworkCore;
 using PanchayatSamitiAPI.Services.IServices;
 
 namespace PanchayatSamitiAPI
@@ -12,11 +13,13 @@ namespace PanchayatSamitiAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
-           
+
             // register DbContext and repositories/services
-            builder.Services.AddDbContext<DataLayer.Models.PanchayatSamitiContext>();
+            builder.Services.AddDbContext<DataLayer.Models.PanchayatSamitiContext>(options =>
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
             builder.Services.AddScoped(typeof(DataLayer.Repository.IRepository<>), typeof(DataLayer.Repository.Repository<>));
-            builder.Services.AddScoped<IDepartmentService,Services.DepartmentService>();
+            builder.Services.AddScoped<IDepartmentService, Services.DepartmentService>();
             builder.Services.AddScoped<ISubDepartmentService, Services.SubDepartmentService>();
             builder.Services.AddScoped<IBankecheTapshilService, Services.BankecheTapshilService>();
             builder.Services.AddScoped<IRelationService, Services.RelationService>();
@@ -28,7 +31,8 @@ namespace PanchayatSamitiAPI
             builder.Services.AddScoped<IBankService, Services.BankService>();
             builder.Services.AddScoped<IRetirementOfficeService, Services.RetirementOfficeService>();
             builder.Services.AddScoped<IVetanShreneeService, Services.VetanShreneeService>();
-
+            builder.Services.AddScoped<IAdhisuchanaService, Services.AdhisuchanaService>();
+            builder.Services.AddScoped<IAdhiSuchanaFormService, Services.AdhiSuchanaFormService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -45,19 +49,13 @@ namespace PanchayatSamitiAPI
             app.UseHttpsRedirection();
             app.UseCors(options =>
             {
-             options.AllowAnyHeader();
+                options.AllowAnyHeader();
                 options.AllowAnyMethod();
                 options.AllowAnyOrigin();
-
-            }
-
-            );
+            });
 
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

@@ -45,8 +45,10 @@ namespace PanchayatSamitiAPI.Services
                     Id = item.Id,
                     BankecheTapshil = item.BankecheTapshil,
                     IsActive = item.IsActive,
+                    CreatedDate=item.UpdatedDate.ToString(),
+
                     UniqueId = item.UniqueId
-                }).ToList()
+                }).OrderByDescending(a => a.CreatedDate).ToList()
             };
 
             return result;
