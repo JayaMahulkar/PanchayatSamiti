@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PanchayatSamitiAPI.Model
 {
-    public class AdhiSuchanaFormModel
+    public class AdhiSuchanaModel
     {
         public int Id { get; set; }
 
@@ -31,10 +31,6 @@ namespace PanchayatSamitiAPI.Model
         public bool? IsActive { get; set; }
 
         public Guid UniqueId { get; set; }
-
-      
-
-     
 
     }
 }

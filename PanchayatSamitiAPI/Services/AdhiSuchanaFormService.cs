@@ -4,59 +4,63 @@ using PanchayatSamitiAPI.Model;
 using PanchayatSamitiAPI.Services.IServices;
 
 namespace PanchayatSamitiAPI.Services
-{   
-    public class AdhiSuchanaFormService : IAdhiSuchanaFormService
+{
+    public class AdhiSuchanaService : IAdhiSuchanaService
     {
         private readonly IRepository<AdhiSuchanaForm> _repository;
 
-        public AdhiSuchanaFormService(IRepository<AdhiSuchanaForm> repository)
+        public AdhiSuchanaService(IRepository<AdhiSuchanaForm> repository)
         {
             _repository = repository;
         }
-        public async Task<bool> AddAdhiSuchanaAsync(AdhiSuchanaFormModel model)
+        public async Task<bool> AddAdhiSuchanaAsync(AdhiSuchanaModel model)
         {
             var entity = new AdhiSuchanaForm
             {
-               EmployeeName=model.EmployeeName,
-               TypeId=model.TypeId,
-               PanchayatSamitiId=model.Id,
-               DesignationId=model.DesignationId,
-               DateOfBirth= DateOnly.FromDateTime(DateTime.Now),
-               ClassId=1,
-               DateforCompletion= DateOnly.FromDateTime(DateTime.Now),
-               DateOfRetirement= DateOnly.FromDateTime(DateTime.Now),
-              
-               ReferenceDate= DateOnly.FromDateTime(DateTime.Now),
-               ReferenceNumber=model.ReferenceNumber,
-               CreatedBy="Jaya",
-               UpdatedBy="JAya",
-               CreatedDate=DateTime.Now,
-               UpdatedDate=DateTime.Now,
-               UniqueId=Guid.NewGuid(),
-               IsActive = true,
+                EmployeeName = model.EmployeeName,
+                TypeId = model.TypeId,
+                PanchayatSamitiId = model.Id,
+                DesignationId = model.DesignationId,
+                DateOfBirth = DateOnly.FromDateTime(DateTime.Now),
+                ClassId = 1,
+                DateforCompletion = DateOnly.FromDateTime(DateTime.Now),
+                DateOfRetirement = DateOnly.FromDateTime(DateTime.Now),
+
+                ReferenceDate = DateOnly.FromDateTime(DateTime.Now),
+                ReferenceNumber = model.ReferenceNumber,
+                CreatedBy = "Jaya",
+                UpdatedBy = "JAya",
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                UniqueId = Guid.NewGuid(),
+                IsActive = true,
 
 
             };
-          return await  _repository.AddAsync(entity);
+            return await _repository.AddAsync(entity);
         }
-           
-      
 
-        public async Task<PaginatedResult<AdhiSuchanaFormModel>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PaginatedResult<AdhiSuchanaModel>> GetAllAsync(int pageNumber, int pageSize)
         {
             var data = await _repository.GetAllAsync(pageNumber, pageSize);
 
-            var result = new PaginatedResult<AdhiSuchanaFormModel>
+            var result = new PaginatedResult<AdhiSuchanaModel>
             {
                 PageNumber = data.PageNumber,
                 PageSize = data.PageSize,
                 TotalCount = data.TotalCount,
-                Data = data.Data.Select(item => new AdhiSuchanaFormModel
+                Data = data.Data.Select(item => new AdhiSuchanaModel
                 {
                     Id = item.Id,
-                    UniqueId=item.UniqueId,
-                    IsActive=item.IsActive,
-                    EmployeeName=item.EmployeeName
+                    UniqueId = item.UniqueId,
+                    IsActive = item.IsActive,
+                    EmployeeName = item.EmployeeName,
+                    PanchayatSamitiId = item.PanchayatSamitiId,
+                    DateOfBirth = item.DateOfBirth,
+                    ClassId = item.ClassId,
+                    DateforCompletion = item.DateforCompletion,
+                    DateOfRetirement = item.DateOfRetirement,
+                    DesignationId = item.DesignationId
 
                 }).ToList()
             };
@@ -64,13 +68,13 @@ namespace PanchayatSamitiAPI.Services
             return result;
         }
 
-        public async Task<AdhiSuchanaFormModel?> GetByIdAsync(int id)
+        public async Task<AdhiSuchanaModel?> GetByIdAsync(int id)
         {
-               
-         var entity = await _repository.GetByIdAsync(id);
+
+            var entity = await _repository.GetByIdAsync(id);
             if (entity == null) return null;
-            
-            return new AdhiSuchanaFormModel
+
+            return new AdhiSuchanaModel
             {
                 Id = entity.Id,
                 EmployeeName = entity.EmployeeName,
@@ -81,9 +85,9 @@ namespace PanchayatSamitiAPI.Services
 
 
 
-        
 
-        public async Task UpdateAsync(AdhiSuchanaFormModel model)
+
+        public async Task UpdateAsync(AdhiSuchanaModel model)
         {
             var existing = await _repository.GetByIdAsync(model.Id);
             if (existing == null)
@@ -92,18 +96,18 @@ namespace PanchayatSamitiAPI.Services
             {
                 Id = model.Id,
                 UniqueId = existing.UniqueId,
-               EmployeeName=model.EmployeeName,
+                EmployeeName = model.EmployeeName,
                 IsActive = model.IsActive ?? true,              /*model.IsActive ?? existing.IsActive,*/
                 CreatedBy = existing.CreatedBy,
                 CreatedDate = existing.CreatedDate,
                 UpdatedBy = "System",
                 UpdatedDate = DateTime.Now,
             };
-                                                                                
-            await _repository.UpdateAsync(updated);
-            }
 
-         
+            await _repository.UpdateAsync(updated);
         }
+
+
     }
+}
 

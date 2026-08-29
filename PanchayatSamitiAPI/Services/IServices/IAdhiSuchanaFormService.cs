@@ -3,12 +3,12 @@ using PanchayatSamitiAPI.Model;
 
 namespace PanchayatSamitiAPI.Services.IServices
 {
-    public interface IAdhiSuchanaFormService
+    public interface IAdhiSuchanaService
     {
-        Task<bool> AddAdhiSuchanaAsync(AdhiSuchanaFormModel model);
-        Task<PaginatedResult<AdhiSuchanaFormModel>> GetAllAsync(int pageNumber, int pageSize);
-        Task<AdhiSuchanaFormModel?> GetByIdAsync(int id);
-        Task UpdateAsync(AdhiSuchanaFormModel model);
+        Task<bool> AddAdhiSuchanaAsync(AdhiSuchanaModel model);
+        Task<PaginatedResult<AdhiSuchanaModel>> GetAllAsync(int pageNumber, int pageSize);
+        Task<AdhiSuchanaModel?> GetByIdAsync(int id);
+        Task UpdateAsync(AdhiSuchanaModel model);
 
     }
 }

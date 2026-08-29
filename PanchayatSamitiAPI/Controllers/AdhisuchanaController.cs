@@ -1,86 +1,86 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PanchayatSamitiAPI.Model;
-using PanchayatSamitiAPI.Services;
 using PanchayatSamitiAPI.Services.IServices;
 
 namespace PanchayatSamitiAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdhisuchanaController : ControllerBase
+    public class AdhiSuchanaController : ControllerBase
     {
-        private readonly IAdhisuchanaService _adhisuchanaService;
-
-        public AdhisuchanaController(IAdhisuchanaService adhisuchanaService)
+        private readonly IAdhiSuchanaService _adhiSuchanaFormServise;
+        public AdhiSuchanaController(IAdhiSuchanaService adhiSuchanaFormService)
         {
+            _adhiSuchanaFormServise = adhiSuchanaFormService;
+        }
 
-            _adhisuchanaService = adhisuchanaService;
-
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        {
+            var paged = await _adhiSuchanaFormServise.GetAllAsync(pageNumber.Value, pageSize.Value);
+            return Ok(paged);
         }
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> AddAdhisuchana([FromBody] AdhisuchanaModel model)
+        public async Task<IActionResult> Create([FromBody] AdhiSuchanaModel model)
         {
-            if (model == null)
+            if (model == null) 
                 return BadRequest();
 
-            var result = await _adhisuchanaService.AddAdhisuchanaAsync(model);
-            if (result)
+            var result = await _adhiSuchanaFormServise.AddAdhiSuchanaAsync(model);
+            
+            if (result) 
                 return Ok();
 
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
-        [HttpGet]
-        [Route("GetAll")]
-        public async Task<IActionResult> GetAllAdhisuchana([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
 
-        {
-            var paged = await _adhisuchanaService.GetAllAsync(pageNumber.Value, pageSize.Value);
-            return Ok(paged);
-
-
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAdhisuchanaById(int id)
-        {
-            var adhisuchanadata = await _adhisuchanaService.GetByIdAsync(id);
-            if (adhisuchanadata == null)
-                return NotFound();
-
-            return Ok(adhisuchanadata);
-        }
 
         [HttpPut]
-        [Route("edit")]
-        public async Task<IActionResult> UpdateAdhisuchana([FromBody] AdhisuchanaModel model)
-
+        [Route("Update")]
+        public async Task<IActionResult> Update([FromBody] AdhiSuchanaModel model)
         {
-            if (model == null)
+            if (model == null) 
                 return BadRequest();
 
-            var existingAdhisuchana = await _adhisuchanaService.GetByIdAsync(model.Id);
-            if (existingAdhisuchana == null)
+            var existing = await _adhiSuchanaFormServise.GetByIdAsync(model.Id);
+
+            if (existing == null) 
                 return NotFound();
 
-            await _adhisuchanaService.UpdateAsync(model);
+            await _adhiSuchanaFormServise.UpdateAsync(model);
+            
             return Ok();
         }
-            [HttpDelete]
-            [Route("Delete/{id}")]
-            public async Task<IActionResult> DeleteDepartment(int id)
-            {
-                var existingAdhisuchana = await _adhisuchanaService.GetByIdAsync(id);
-                if (existingAdhisuchana == null)
-                    return NotFound();
 
-            existingAdhisuchana.IsActive = false;
 
-                await _adhisuchanaService.UpdateAsync(existingAdhisuchana);
-                return Ok();
-            }
-        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var item = await _adhiSuchanaFormServise.GetByIdAsync(id);
+            
+            if (item == null) 
+                return NotFound();
+
+            return Ok(item);
+        }
+
+
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existing = await _adhiSuchanaFormServise.GetByIdAsync(id);
+            
+            if (existing == null) 
+                return NotFound();
+            
+            existing.IsActive = false;
+            
+            await _adhiSuchanaFormServise.UpdateAsync(existing);
+            
+            return Ok();
+        }
     }
 }
